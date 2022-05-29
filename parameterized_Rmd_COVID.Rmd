@@ -13,7 +13,7 @@ params:
 
 ### Data 
 
-This report has been written to represent the [public data](https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country) on COVID-19 cases and deaths as published by the European Center for Disease Prevention and Control (ECDC). 
+This report has been written to represent the public data on COVID-19 cases and deaths, as published by the European Center for Disease Prevention and Control (ECDC) and accessible via: https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country.
 
 ```{r, include = FALSE}
 library(tidyverse)
