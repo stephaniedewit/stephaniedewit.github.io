@@ -21,11 +21,12 @@ library(utils)
 library(scales)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-
-data <- read.csv("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv", na.strings = "", fileEncoding = "UTF-8-BOM")
 ```
 
 ```{r, include = FALSE}
+# Data inlezen:
+data <- read.csv("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv", na.strings = "", fileEncoding = "UTF-8-BOM")
+
 # Filteren op parameters:
 data_plot <- data %>% filter(countriesAndTerritories == params$country, year == params$year, month == (params$month - 1) | month == params$month | month == (params$month + 1))
 ```
