@@ -1,0 +1,146 @@
+---
+title: "__COVID-19 cases and deaths for selected countries and months__"
+author: "Stephanie de Wit"
+date: "_`r Sys.Date()`_"
+output: 
+  pdf_document:
+    extra_dependencies: ["float"]
+params:
+  country: "Netherlands"
+  year: 2022
+  month: 3
+---
+
+### Data 
+
+This report has been written to represent the [public data](https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country) on COVID-19 cases and deaths as published by the European Center for Disease Prevention and Control (ECDC). 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(utils)
+library(scales)
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
+data <- read.csv("https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv", na.strings = "", fileEncoding = "UTF-8-BOM")
+```
+
+```{r, include = FALSE}
+# Filteren op parameters:
+data_plot <- data %>% filter(countriesAndTerritories == params$country, year == params$year, month == (params$month - 1) | month == params$month | month == (params$month + 1))
+```
+
+```{r, include = FALSE}
+# Objects voor land, jaartal, maanden en titels aanmaken:
+country <- params$country
+year <- params$year
+
+if(params$month == 1){month <- "January"}
+if(params$month == 2){month <- "February"}
+if(params$month == 3){month <- "March"}
+if(params$month == 4){month <- "April"}
+if(params$month == 5){month <- "May"}
+if(params$month == 6){month <- "June"}
+if(params$month == 7){month <- "July"}
+if(params$month == 8){month <- "August"}
+if(params$month == 9){month <- "September"}
+if(params$month == 10){month <- "October"}
+if(params$month == 11){month <- "November"}
+if(params$month == 12){month <- "December"}
+
+if((params$month - 1) == 1){month_b <- "January"}
+if((params$month - 1) == 2){month_b <- "February"}
+if((params$month - 1) == 3){month_b <- "March"}
+if((params$month - 1) == 4){month_b <- "April"}
+if((params$month - 1) == 5){month_b <- "May"}
+if((params$month - 1) == 6){month_b <- "June"}
+if((params$month - 1) == 7){month_b <- "July"}
+if((params$month - 1) == 8){month_b <- "August"}
+if((params$month - 1) == 9){month_b <- "September"}
+if((params$month - 1) == 10){month_b <- "October"}
+if((params$month - 1) == 11){month_b <- "November"}
+if((params$month - 1) == 12){month_b <- "December"}
+
+if((params$month + 1) == 1){month_a <- "January"}
+if((params$month + 1) == 2){month_a <- "February"}
+if((params$month + 1) == 3){month_a <- "March"}
+if((params$month + 1) == 4){month_a <- "April"}
+if((params$month + 1) == 5){month_a <- "May"}
+if((params$month + 1) == 6){month_a <- "June"}
+if((params$month + 1) == 7){month_a <- "July"}
+if((params$month + 1) == 8){month_a <- "August"}
+if((params$month + 1) == 9){month_a <- "September"}
+if((params$month + 1) == 10){month_a <- "October"}
+if((params$month + 1) == 11){month_a <- "November"}
+if((params$month + 1) == 12){month_a <- "December"}
+
+cases_b <- paste("COVID-19 cases for", country, "in", month_b, year)
+cases <- paste("COVID-19 cases for", country, "in", month, year)
+cases_a <- paste("COVID-19 cases for", country, "in", month_a, year)
+
+deaths_b <- paste("COVID-19 deaths for", country, "in", month_b, year)
+deaths <- paste("COVID-19 deaths for", country, "in", month, year)
+deaths_a <- paste("COVID-19 deaths for", country, "in", month_a, year)
+```
+
+### COVID-19 cases
+
+The three graphs below depict the number of new COVID-19 cases as measured per day for the chosen month, the previous month and the following month.
+
+```{r, fig.cap = cases_b, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == (params$month - 1)) %>% ggplot(aes(x = day, y = cases)) +
+  geom_point(size = 2, color = "orange") +
+  labs(title = paste("COVID-19 cases for", country, "in", month_b, year), x = "Day", y = "New COVID-19 cases") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$cases))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
+
+```{r, fig.cap = cases, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == params$month) %>% ggplot(aes(x = day, y = cases)) +
+  geom_point(size = 2, color = "orange") +
+  labs(title = paste("COVID-19 cases for", country, "in", month, year), x = "Day", y = "New COVID-19 cases") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$cases))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
+
+```{r, fig.cap = cases_a, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == (params$month + 1)) %>% ggplot(aes(x = day, y = cases)) +
+  geom_point(size = 2, color = "orange") +
+  labs(title = paste("COVID-19 cases for", country, "in", month_a, year), x = "Day", y = "New COVID-19 cases") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$cases))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
+
+### COVID-19 deaths
+
+The three graphs below depict the amount of COVID-19 deaths as measured per day for the chosen month, the previous month and the following month.
+
+```{r, fig.cap = deaths_b, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == (params$month - 1)) %>% ggplot(aes(x = day, y = deaths)) +
+  geom_point(size = 2, color = "red") +
+  labs(title = paste("COVID-19 deaths for", country, "in", month_b, year), x = "Day", y = " New COVID-19 deaths") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$deaths))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
+
+```{r, fig.cap = deaths, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == params$month) %>% ggplot(aes(x = day, y = deaths)) +
+  geom_point(size = 2, color = "red") +
+  labs(title = paste("COVID-19 deaths for", country, "in", month, year), x = "Day", y = "New COVID-19 deaths") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$deaths))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
+
+```{r, fig.cap = deaths_a, echo = FALSE, fig.pos = "H", fig.align = "center", out.width = "80%"}
+data_plot %>% filter(month == (params$month + 1)) %>% ggplot(aes(x = day, y = deaths)) +
+  geom_point(size = 2, color = "red") +
+  labs(title = paste("COVID-19 deaths for", country, "in", month_a, year), x = "Day", y = "New COVID-19 deaths") +
+  scale_y_continuous(labels = comma, limits = c(0, max(data_plot$deaths))) +
+  scale_x_continuous(limits = c(1, 31)) +
+  theme_bw()
+```
