@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Welcome to my first GitHub Pages repository
+# stephaniedewit.github.io
 
 <!-- badges: start -->
 <!-- badges: end -->

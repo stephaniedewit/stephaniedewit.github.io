@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Welcome to my first GitHub Pages repository
+# stephaniedewit.github.io
 
 <!-- badges: start -->
 <!-- badges: end -->
